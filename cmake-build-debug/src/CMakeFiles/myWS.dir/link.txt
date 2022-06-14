@@ -1,0 +1,1 @@
+/usr/bin/c++ -g -rdynamic CMakeFiles/myWS.dir/buffer.cpp.o CMakeFiles/myWS.dir/epoller.cpp.o CMakeFiles/myWS.dir/main.cpp.o -o myWS  -lpthread 

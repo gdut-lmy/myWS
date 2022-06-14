@@ -1,0 +1,12 @@
+[
+{
+  "directory": "/home/lmy/myWS/build/src",
+  "command": "/usr/bin/c++  -I/home/lmy/myWS/include   -O0 -g -ggdb -Wno-unused-variable -std=gnu++1z -o CMakeFiles/myWS.dir/buffer.cpp.o -c /home/lmy/myWS/src/buffer.cpp",
+  "file": "/home/lmy/myWS/src/buffer.cpp"
+},
+{
+  "directory": "/home/lmy/myWS/build/src",
+  "command": "/usr/bin/c++  -I/home/lmy/myWS/include   -O0 -g -ggdb -Wno-unused-variable -std=gnu++1z -o CMakeFiles/myWS.dir/main.cpp.o -c /home/lmy/myWS/src/main.cpp",
+  "file": "/home/lmy/myWS/src/main.cpp"
+}
+]
