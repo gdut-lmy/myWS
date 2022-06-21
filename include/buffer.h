@@ -68,7 +68,10 @@ public:
 
     ~Buffer();
 
+
 private:
+    friend std::ostream &operator<<(std::ostream &out, const Buffer &buffer);
+
     //返回指向缓冲区初始位置的指针
     char *BeginPtr_();
 
@@ -86,5 +89,6 @@ private:
     std::atomic<std::size_t> writePos_;
 };
 
+std::ostream &operator<<(std::ostream &out, const Buffer &buffer);
 
 #endif //MYWS_BUFFER_H

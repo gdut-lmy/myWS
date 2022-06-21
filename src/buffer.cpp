@@ -147,3 +147,16 @@ void Buffer::initPtr() {
 Buffer::~Buffer() {
 
 }
+
+
+std::ostream &operator<<(std::ostream &out, const Buffer &buffer) {
+
+    out << buffer.readPos_ << " " << buffer.writePos_ << "\n";
+
+    for (int i = buffer.readPos_; i <= buffer.writePos_; ++i) {
+        out << buffer.buffer_[i];
+    }
+
+    return out;
+
+}

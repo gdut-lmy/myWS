@@ -13,7 +13,11 @@ int main() {
                      "Content-Type: application/x-www-form-urlencoded\r\n"
                      "Content-Length: 40\r\n"
                      "Connection: Keep-Alive\r\n";
+
+
     buffer.append(s1);
+
+    std::cout << buffer;
 
     HTTPrequest HP;
 
