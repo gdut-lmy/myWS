@@ -1,12 +1,13 @@
+//
+// Created by lmy on 2022/6/20.
+//
+
 #include <iostream>
-
-
 #include "threadPool.h"
-#include<iostream>
-#include<vector>
 #include<future>
 #include<functional>
 #include<random>
+#include <algorithm>
 
 std::random_device rd;
 std::mt19937 mt(rd());
@@ -36,21 +37,15 @@ int multiply_return(const int a, const int b) {
     return res;
 }
 
-int main(void) {
 
-
+int main() {
 
 
     my::threadPool pool(4);
 
-
     for (int i = 0; i < 8; i++) {
-        pool.submit(multiply, i, i + 1);
+        pool.submit(multiply_return, i, i + 10);
     }
-
-
-
-
 
 
     return 0;

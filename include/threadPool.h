@@ -59,8 +59,7 @@ namespace my {
         template<typename F, typename... Args>
         auto submit(F &&f, Args &&... args) -> std::future<decltype(f(args...))> {
             auto taskPtr = std::make_shared<std::packaged_task<decltype(f(args...))()>>(
-                    std::bind(std::forward<F>(f), std::forward<Args>(args)...)
-            );
+                    std::bind(std::forward<F>(f), std::forward<Args>(args)...));
             {
                 std::unique_lock<std::mutex> lk(m_mutex);
                 if (m_stop) throw std::runtime_error("submit on stopped threadPool");
