@@ -29,7 +29,7 @@ int main() {
     res.init("/resource", HP.path(), HP.isKeepAlive(), 200);
     res.makeResponse(pbuffer);
 
-    std::cout << qbuffer;
+    std::cout << pbuffer;
 
 
 }
