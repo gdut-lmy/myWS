@@ -3,10 +3,11 @@
 //
 
 #include "HTTPrequest.h"
-
+#include "HTTPresponse.h"
 
 int main() {
-    Buffer buffer;
+    Buffer qbuffer;
+    Buffer pbuffer;
     std::string s1 = "POST / HTTP/1.1\r\n"
                      "Host: www.baidu.com\r\n"
                      "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.7.6)\r\n"
@@ -15,13 +16,20 @@ int main() {
                      "Connection: Keep-Alive\r\n";
 
 
-    buffer.append(s1);
+    qbuffer.append(s1);
 
-    std::cout << buffer;
+    std::cout << qbuffer;
 
     HTTPrequest HP;
 
-    HP.parse(buffer);
+    HTTPresponse res;
 
-    std::cout << HP.method() << ' ' << HP.path() << ' ' << HP.version() << ' ' << std::endl;
+    HP.parse(qbuffer);
+
+    res.init("/resource", HP.path(), HP.isKeepAlive(), 200);
+    res.makeResponse(pbuffer);
+
+    std::cout << qbuffer;
+
+
 }

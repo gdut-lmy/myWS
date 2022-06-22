@@ -12,6 +12,7 @@
 #include <string>
 #include <regex>
 
+//处理HTTP请求
 class HTTPrequest {
 public:
 
@@ -21,6 +22,7 @@ public:
 
     void init();
 
+    //有限状态机解析HTTP请求
     bool parse(Buffer &buffer);
 
     //获取HTTP信息
@@ -40,14 +42,18 @@ public:
 
 private:
 
+    //解析请求行
     bool parseRequestLine(const std::string &line);
 
+    //解析请求字段
     void parseRequestHeader(const std::string &line);
 
+    //解析请求体
     void parseRequestBody(const std::string &line);
 
     static int convertHex(char ch);
 
+    //提取请求路径
     void parsePath();
 
     void parsePost();
@@ -59,6 +65,7 @@ private:
 
     std::string m_method, m_path, m_version, m_body;
 
+    //存储HTTP请求字段内容
     std::unordered_map<std::string, std::string> m_header;
     std::unordered_map<std::string, std::string> m_post;
 
