@@ -2,12 +2,16 @@
 // Created by lmy on 2022/6/21.
 //
 
-#include "HTTPrequest.h"
-#include "HTTPresponse.h"
+#include "HTTPconnection.h"
+#include "epoller.h"
 
-int main() {
-    Buffer qbuffer;
-    Buffer pbuffer;
+
+int main(int argc, char *argv[]) {
+
+    const char *ip = argv[1];
+    int port = atoi(argv[2]);
+
+
     std::string s1 = "POST / HTTP/1.1\r\n"
                      "Host: www.baidu.com\r\n"
                      "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.7.6)\r\n"
@@ -16,20 +20,21 @@ int main() {
                      "Connection: Keep-Alive\r\n";
 
 
-    qbuffer.append(s1);
+    auto *users = new HTTPconnection[100];
+    Epoller epoller;
 
-    std::cout << qbuffer;
+    int socketFd = socket(PF_INET, SOCK_STREAM, 0);
+    struct sockaddr_in address;
+    bzero(&address, sizeof(address));
+    address.sin_family = AF_INET;
+    inet_pton(AF_INET, ip, &address.sin_addr);
+    address.sin_port = htons(port);
 
-    HTTPrequest HP;
+    int ret = bind(socketFd, (struct sockaddr *) &address, sizeof(address));
+    assert(ret > 0);
 
-    HTTPresponse res;
-
-    HP.parse(qbuffer);
-
-    res.init("/resource", HP.path(), HP.isKeepAlive(), 200);
-    res.makeResponse(pbuffer);
-
-    std::cout << pbuffer;
+    ret = listen(socketFd, 5);
+    assert(ret > 0);
 
 
 }
