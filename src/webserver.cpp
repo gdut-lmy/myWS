@@ -52,14 +52,14 @@ void WebServer::run() {
 
             if (fd == listenFd_) {
                 handleListen();
-                std::cout << fd << " is listening!" << std::endl;
+                //std::cout << fd << " is listening!" << std::endl;
             } else if (events & (EPOLLRDHUP | EPOLLHUP | EPOLLERR)) {
                 assert(users_.count(fd) > 0);
                 closeConnection(&users_[fd]);
             } else if (events & EPOLLIN) {
                 assert(users_.count(fd) > 0);
                 handleRead(&users_[fd]);
-                std::cout << fd << " reading end!" << std::endl;
+                //std::cout << fd << " reading end!" << std::endl;
             } else if (events & EPOLLOUT) {
                 assert(users_.count(fd) > 0);
                 handleWrite(&users_[fd]);
@@ -163,16 +163,18 @@ void WebServer::addClientConnection(int fd, sockaddr_in addr) {
     assert(fd > 0);
     users_[fd].initHTTPConn(fd, addr);
     if (timeoutMS_ > 0) {
-        std::shared_ptr<Timer> httpConnectionTimer = timer_->addTimer(timeoutMS_, std::bind(&WebServer::closeConnection,this,&users_[fd]));
+        std::shared_ptr<Timer> httpConnectionTimer = timer_->addTimer(timeoutMS_,
+                                                                      [this, capture0 = &users_[fd]] { closeConnection(capture0); });
         users_[fd].setTimer(httpConnectionTimer);
     }
     epoller_->addFd(fd, EPOLLIN | connectionEvent_);
     setFdNonblock(fd);
+   // std::cout << "new connection\n";
 }
 
 void WebServer::closeConnection(HTTPconnection *client) {
     assert(client);
-    //std::cout<<"client"<<client->getFd()<<" quit!"<<std::endl;
+   // std::cout << "client" << client->getFd() << " quit!" << std::endl;
     timer_->delTimer(client->getTimer());
     epoller_->delFd(client->getFd());
     client->closeHTTPConn();

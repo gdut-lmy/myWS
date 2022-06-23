@@ -2,10 +2,11 @@
 // Created by lmy on 2022/6/20.
 //
 
+
 #include "timer.h"
 
 
-std::shared_ptr<Timer> TimerManager::addTimer(const int &time, const TimeOutFuction& timeOutFun) {
+std::shared_ptr<Timer> TimerManager::addTimer(const int &time, const TimeOutFuction &timeOutFun) {
     std::shared_ptr<Timer> timer = std::make_shared<Timer>(nowTime_ + MS(time), timeOutFun);
     {
         std::unique_lock<std::mutex> lock(lock_);
@@ -20,7 +21,7 @@ void TimerManager::delTimer(const std::shared_ptr<Timer> &timer) {
         return;
     }
     {
-        std::unique_lock<std::mutex> lock(lock_);    //应该可以不用上锁，不过先上个锁看看
+        //std::unique_lock<std::mutex> lock(lock_);    //应该可以不用上锁，不过先上个锁看看 上锁有bug
         timer->setUsed(false);
     }
 }
