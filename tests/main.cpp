@@ -5,6 +5,6 @@
 #include "webserver.h"
 
 int main(int argc, char *argv[]) {
-    WebServer server(1316, 3, 60000, false, 4);
+    WebServer server(8888, 3, 60000, false, 4);
     server.run();
 }

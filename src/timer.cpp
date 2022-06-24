@@ -21,7 +21,7 @@ void TimerManager::delTimer(const std::shared_ptr<Timer> &timer) {
         return;
     }
     {
-        //std::unique_lock<std::mutex> lock(lock_);    //应该可以不用上锁，不过先上个锁看看 上锁有bug
+        //std::unique_lock<std::mutex> lock(lock_);    //上锁有bug
         timer->setUsed(false);
     }
 }
