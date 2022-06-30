@@ -27,8 +27,10 @@ public:
 
     int wait(int timewait = -1);
 
+    //返回epoll事件的fd
     int getEventFd(size_t i) const;
 
+    //返回epoll事件
     uint32_t getEvents(size_t i) const;
 
     ~Epoller();

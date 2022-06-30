@@ -21,7 +21,7 @@
 
 class WebServer {
 public:
-    WebServer(int port, int trigMode, int timeoutMS, bool optLinger, int threadNum);
+    WebServer(const char* ip,int port, int trigMode, int timeoutMS, bool optLinger, int threadNum);
 
     ~WebServer();
 
@@ -61,6 +61,7 @@ private:
     bool isClose_;
     int listenFd_;
     bool openLinger_;
+    const char *m_ip;
     char *srcDir_;//需要获取的路径
 
     uint32_t listenEvent_;

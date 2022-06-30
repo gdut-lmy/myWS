@@ -4,16 +4,20 @@
 
 #include "webserver.h"
 
-WebServer::WebServer(int port, int trigMode, int timeoutMS, bool optLinger, int threadNum) : port_(port),
-                                                                                             openLinger_(optLinger),
-                                                                                             timeoutMS_(timeoutMS),
-                                                                                             isClose_(false),
-                                                                                             timer_(std::make_shared<TimerManager>()),
-                                                                                             threadpool_(
-                                                                                                     std::make_shared<my::threadPool>(
-                                                                                                             threadNum)),
-                                                                                             epoller_(
-                                                                                                     std::make_shared<Epoller>()) {
+WebServer::WebServer(const char *ip, int port, int trigMode, int timeoutMS, bool optLinger, int threadNum) : m_ip(ip),
+                                                                                                             port_(port),
+                                                                                                             openLinger_(
+                                                                                                                     optLinger),
+                                                                                                             timeoutMS_(
+                                                                                                                     timeoutMS),
+                                                                                                             isClose_(
+                                                                                                                     false),
+                                                                                                             timer_(std::make_shared<TimerManager>()),
+                                                                                                             threadpool_(
+                                                                                                                     std::make_shared<my::threadPool>(
+                                                                                                                             threadNum)),
+                                                                                                             epoller_(
+                                                                                                                     std::make_shared<Epoller>()) {
     //获取当前工作目录的绝对路径
     srcDir_ = getcwd(nullptr, 256);
     assert(srcDir_);
@@ -45,7 +49,7 @@ void WebServer::run() {
         if (timeoutMS_ > 0) {
             timeMS = timer_->getExpireTime();
         }
-        int eventCnt = epoller_->wait(timeMS);
+        int eventCnt = epoller_->wait(timeMS);//返回就绪的文件描述符个数
         for (int i = 0; i < eventCnt; ++i) {
             int fd = epoller_->getEventFd(i);
             uint32_t events = epoller_->getEvents(i);
@@ -55,6 +59,7 @@ void WebServer::run() {
                 //std::cout << fd << " is listening!" << std::endl;
             } else if (events & (EPOLLRDHUP | EPOLLHUP | EPOLLERR)) {
                 assert(users_.count(fd) > 0);
+                /*有异常，关闭连接*/
                 closeConnection(&users_[fd]);
             } else if (events & EPOLLIN) {
                 assert(users_.count(fd) > 0);
@@ -74,12 +79,14 @@ void WebServer::run() {
 bool WebServer::initSocket() {
     int ret;
     struct sockaddr_in addr;
+    bzero(&addr, sizeof(addr));
     if (port_ > 65535 || port_ < 1024) {
         //std::cout<<"Port number error!"<<std::endl;
         return false;
     }
-    addr.sin_family = AF_INET;
-    addr.sin_addr.s_addr = htonl(INADDR_ANY);
+    addr.sin_family = AF_INET;//采用TCP/IP协议族
+    inet_pton(AF_INET, m_ip, &addr.sin_addr);
+    //addr.sin_addr.s_addr = htonl(INADDR_ANY);
     addr.sin_port = htons(port_);
     struct linger optLinger = {0};
     if (openLinger_) {
@@ -164,17 +171,19 @@ void WebServer::addClientConnection(int fd, sockaddr_in addr) {
     users_[fd].initHTTPConn(fd, addr);
     if (timeoutMS_ > 0) {
         std::shared_ptr<Timer> httpConnectionTimer = timer_->addTimer(timeoutMS_,
-                                                                      [this, capture0 = &users_[fd]] { closeConnection(capture0); });
+                                                                      [this, capture0 = &users_[fd]] {
+                                                                          closeConnection(capture0);
+                                                                      });
         users_[fd].setTimer(httpConnectionTimer);
     }
     epoller_->addFd(fd, EPOLLIN | connectionEvent_);
     setFdNonblock(fd);
-   // std::cout << "new connection\n";
+    // std::cout << "new connection\n";
 }
 
 void WebServer::closeConnection(HTTPconnection *client) {
     assert(client);
-   // std::cout << "client" << client->getFd() << " quit!" << std::endl;
+    // std::cout << "client" << client->getFd() << " quit!" << std::endl;
     timer_->delTimer(client->getTimer());
     epoller_->delFd(client->getFd());
     client->closeHTTPConn();

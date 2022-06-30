@@ -11,7 +11,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/build)
 set(LIBRARY_OUT PUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
-include_directories(include)
+include_directories(include include/sync)
 # 加载子目录
 add_subdirectory(src)
 add_subdirectory(tests)

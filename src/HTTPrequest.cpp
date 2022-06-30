@@ -45,7 +45,6 @@ bool HTTPrequest::isKeepAlive() const {
     return false;
 }
 
-
 bool HTTPrequest::parse(Buffer &buffer) {
     const char CRLF[] = "\r\n";
     if (buffer.readableBytes() == 0) {
@@ -133,7 +132,7 @@ std::string HTTPrequest::version() const {
 }
 
 std::string HTTPrequest::getPost(const std::string &key) const {
-    assert(key != "");
+    assert(key != " ");
     if (m_post.count(key) == 1) {
         return m_post.find(key)->second;
     }
@@ -141,7 +140,7 @@ std::string HTTPrequest::getPost(const std::string &key) const {
 }
 
 std::string HTTPrequest::getPost(const char *key) const {
-    assert(key != "");
+    assert(key != " ");
     if (m_post.count(key) == 1) {
         return m_post.find(key)->second;
     }
@@ -169,7 +168,7 @@ int HTTPrequest::convertHex(char ch) {
 
 void HTTPrequest::parsePost() {
     if (m_method == "POST" && m_header["Content-Type"] == "application/x-www-form-urlencoded") {
-        if (m_body.size() == 0) { return; }
+        if (m_body.empty()) { return; }
 
         std::string key, value;
         int num = 0;
