@@ -1,4 +1,5 @@
 
+
 set(SRC_LIST sync/mutex.cpp
         buffer.cpp
         epoller.cpp
@@ -7,9 +8,10 @@ set(SRC_LIST sync/mutex.cpp
         HTTPresponse.cpp
         log.cpp
         timer.cpp
-        webserver.cpp)
+        webserver.cpp
+        util.cpp
+        threadPool.cpp)
+set(LIB_LIB pthread yaml-cpp dl)
+add_library(myWS STATIC ${SRC_LIST} )
 
-add_library(myWS STATIC ${SRC_LIST})
-
-
-target_link_libraries(myWS pthread)
+target_link_libraries(myWS ${LIB_LIB})

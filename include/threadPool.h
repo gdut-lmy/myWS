@@ -12,8 +12,10 @@
 #include<queue>
 #include<future>
 #include <functional>
+#include "log.h"
 
 namespace my {
+
     class threadPool {
 
     public:
@@ -70,8 +72,17 @@ namespace my {
 
         }
 
+        /**
+         * @brief 获取当前的线程名称
+         */
+        static const std::string &GetName();
+
+        static void SetName(const std::string& name);
+
     private:
         bool m_stop;
+        pid_t m_id = 0;
+        std::string m_name;
         std::vector<std::thread> m_thread;
         std::queue<std::function<void()>> tasks;
         std::mutex m_mutex;
