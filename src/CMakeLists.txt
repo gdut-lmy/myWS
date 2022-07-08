@@ -10,7 +10,9 @@ set(SRC_LIST sync/mutex.cpp
         timer.cpp
         webserver.cpp
         util.cpp
-        threadPool.cpp)
+        threadPool.cpp
+        fiber.cpp
+        config.cpp)
 set(LIB_LIB pthread yaml-cpp dl)
 add_library(myWS STATIC ${SRC_LIST} )
 

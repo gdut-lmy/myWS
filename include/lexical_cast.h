@@ -4,7 +4,7 @@
 
 #ifndef MYWS_LEXICAL_CAST_H
 #define MYWS_LEXICAL_CAST_H
-#define ACID_LEXICAL_CAST_H
+
 #include <type_traits>
 #include <string>
 #include <cstdlib>

@@ -7,6 +7,7 @@
 #include <cstdarg>
 #include <cstring>
 #include <utility>
+#include "config.h"
 
 namespace my {
 

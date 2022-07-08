@@ -23,6 +23,7 @@
 #include <iostream>
 #include <boost/lexical_cast.hpp>
 #include "log.h"
+#include "fiber.h"
 
 namespace my {
 

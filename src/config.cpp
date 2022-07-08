@@ -50,7 +50,7 @@ namespace my {
     }
 
     void Config::LoadFromFile(const std::string &file) {
-        //MY_LOG_INFO(MY_LOG_ROOT())<<"load file:"<<file;
+        MY_LOG_INFO(MY_LOG_ROOT())<<"load file:"<<file;
         YAML::Node root = YAML::LoadFile(file);
         LoadFromYaml(root);
     }
